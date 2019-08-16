@@ -39,6 +39,9 @@ private:
     void on_menu_file_new();
     void on_menu_file_open();
     void on_menu_file_save();
+    bool on_keypress(GdkEventKey *event);
+    void set_keybindings(void);
+    void (Editor::*keybind_table[26])(void);
 };
 
 

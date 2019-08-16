@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project (NoTeX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 set(NoTeX_VERSION_MAJOR 1)
 set(NoTeX_VERSION_MINOR 0)

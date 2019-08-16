@@ -7,6 +7,15 @@ Interested in development? Great! Below are a set of instructions to quick start
 
 ### Quick Setup
 
+#### Required Packages
+
+* gtkmm-3.0
+* cairo (version 1.2.6 or greater)
+* poppler-glib (version 0.5.4 or greater)
+* glib-2.0
+
+#### Build Steps
+
 1. [Fork the repository](https://help.github.com/en/articles/fork-a-repo#fork-an-example-repository).
 
 2. [Clone the repository](https://help.github.com/en/articles/cloning-a-repository) onto your machine.

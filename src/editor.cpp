@@ -12,6 +12,11 @@ Editor::Editor() : Gtk::ApplicationWindow() {
 
     // Allow ClickableImages to receive input
     this->set_events(Gdk::BUTTON_PRESS_MASK);
+    
+    //Allow for keybindings
+    this->set_events( Gdk::KEY_PRESS_MASK );
+    this->set_keybindings();
+    this->signal_key_press_event().connect(sigc::mem_fun(*this, &Editor::on_keypress)); 
 
     // Set up the textview
 
@@ -19,7 +24,7 @@ Editor::Editor() : Gtk::ApplicationWindow() {
     // this->m_textview.set_size_request (400, 400);
     // this->m_textview.set_wrap_mode(Gtk::WRAP_WORD);
     // auto m_textBuffer = Gtk::TextBuffer::create();
-    // m_textBuffer->set_text("Welcome to NoTeX!");
+    // m_textBuffer->set_text("Welbool YourClass::onKeyRelease(GdkEventKey *event) come to NoTeX!");
     // this->m_textview.set_buffer(m_textBuffer);
 
     this->init_menubar();
@@ -61,6 +66,100 @@ void Editor::init_menubar() {
     std::cout << "Menubar finished initializing\n";
 #endif
     // code here
+}
+
+void Editor::set_keybindings(){
+	//initialize main variables
+	char func[26][32];
+	memset(func, 0, sizeof(char)*26*32);
+	memset(&this->keybind_table, 0, sizeof(void (Editor::*)(void))*26);
+	
+	//read keybind settings from file
+	char buff[64];
+	std::ifstream in;
+	in.open("../src/keybindings.txt");
+	if(!in){
+		std::cerr << "Unable to open keybindings.txt\n";
+		return;
+	}
+	int i=0, j=0;
+	char c;
+	bool f = true;
+	while(in.get(c)){
+		if(isalnum(c)){
+			if(c > 90){
+				c -= 32;
+			}
+			if(f){
+				buff[j] = c;
+				++j;
+			} else {
+				strcpy(func[c-65], buff);
+				f = true;
+			}
+		} else if(c == ':'){
+			buff[j] = '\0';
+			f = false;
+			j = 0;
+		}
+	}
+	in.close();
+	
+	//map file title to function
+	for(i=0; i<26; ++i){
+		//printf("%d: \"%s\"\n", i, func[i]); //check function labels
+		if(strcmp(func[i], "FILENEW") == 0){
+			this->keybind_table[i] = &Editor::on_menu_file_new;
+		} else if(strcmp(func[i], "FILEOPEN") == 0){
+			this->keybind_table[i] = &Editor::on_menu_file_open;
+		} else if(strcmp(func[i], "FILESAVE") == 0){
+			this->keybind_table[i] = &Editor::on_menu_file_save;
+		}
+	}
+}
+
+
+bool Editor::on_keypress(GdkEventKey *event){
+	int key = -1;
+	
+	//ctrl + key style
+	if(event->state & GDK_CONTROL_MASK){
+		
+		switch(event->keyval){
+			case GDK_KEY_a: key=0;  break;
+			case GDK_KEY_b: key=1;  break;
+			case GDK_KEY_c: key=2;  break;
+			case GDK_KEY_d: key=3;  break;
+			case GDK_KEY_e: key=4;  break;
+			case GDK_KEY_f: key=5;  break;
+			case GDK_KEY_g: key=6;  break;
+			case GDK_KEY_h: key=7;  break;
+			case GDK_KEY_i: key=8;  break;
+			case GDK_KEY_j: key=9;  break;
+			case GDK_KEY_k: key=10; break;
+			case GDK_KEY_l: key=11; break;
+			case GDK_KEY_m: key=12; break;
+			case GDK_KEY_n: key=13; break;
+			case GDK_KEY_o: key=14; break;
+			case GDK_KEY_p: key=15; break;
+			case GDK_KEY_q: key=16; break;
+			case GDK_KEY_r: key=17; break;
+			case GDK_KEY_s: key=18; break;
+			case GDK_KEY_t: key=19; break;
+			case GDK_KEY_u: key=20; break;
+			case GDK_KEY_v: key=21; break;
+			case GDK_KEY_w: key=22; break;
+			case GDK_KEY_x: key=23; break;
+			case GDK_KEY_y: key=24; break;
+			case GDK_KEY_z: key=25; break;
+		}
+		
+		//printf("key: %d\n", key); //see when ctrl + key is pressed
+		if(key != -1 && this->keybind_table[key] != NULL){
+			(this->*keybind_table[key])();
+		}
+	}
+	return true;
 }
 
 /** @brief Creates a new text buffer to work on
