@@ -77,9 +77,9 @@ void Editor::set_keybindings(){
 	//read keybind settings from file
 	char buff[64];
 	std::ifstream in;
-	in.open("../src/keybindings.txt");
+	in.open("../src/keybindings");
 	if(!in){
-		std::cerr << "Unable to open keybindings.txt\n";
+		std::cerr << "Unable to open keybindings\n";
 		return;
 	}
 	int i=0, j=0;
