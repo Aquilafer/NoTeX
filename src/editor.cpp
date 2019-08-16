@@ -24,7 +24,7 @@ Editor::Editor() : Gtk::ApplicationWindow() {
     // this->m_textview.set_size_request (400, 400);
     // this->m_textview.set_wrap_mode(Gtk::WRAP_WORD);
     // auto m_textBuffer = Gtk::TextBuffer::create();
-    // m_textBuffer->set_text("Welbool YourClass::onKeyRelease(GdkEventKey *event) come to NoTeX!");
+    // m_textBuffer->set_text("Welcome to NoTeX!");
     // this->m_textview.set_buffer(m_textBuffer);
 
     this->init_menubar();
